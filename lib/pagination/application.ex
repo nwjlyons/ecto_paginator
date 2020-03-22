@@ -5,7 +5,7 @@ defmodule Pagination.Application do
 
   def start(_type, _args) do
     children = [
-      Pagination.Repo,
+      Pagination.Repo
     ]
 
     opts = [strategy: :one_for_one, name: Pagination.Supervisor]

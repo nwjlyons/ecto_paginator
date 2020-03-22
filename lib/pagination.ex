@@ -1,18 +1,10 @@
 defmodule Pagination do
-  @moduledoc """
-  Documentation for `Pagination`.
-  """
+  import Ecto.Query, warn: false
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Pagination.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def paginate(query, page, paginate_by) do
+    offset_value = (page - 1) * paginate_by
+    query
+    |> offset(^offset_value)
+    |> limit(^paginate_by)
   end
 end

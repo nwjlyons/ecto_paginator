@@ -1,22 +1,18 @@
 defmodule PaginationTest do
   use ExUnit.Case
   import Ecto.Query, warn: false
+  alias Pagination.Fruit
 
   defp list_fruits() do
-    query =
-      from f in Fruit
+    from(f in Fruit)
   end
 
   describe "paginate" do
-
     test "returns Ecto.Query with offset and limit statements" do
-
-      # /fruits?page=1
-
-      query = Pagination.paginate(list_fruits, 1, 25, 100)
-
-      assert query.offset == 0
-      assert query.limit == 25
+      paginate_by = 25
+      query = Pagination.paginate(list_fruits(), 1, paginate_by)
+      assert %Ecto.Query.QueryExpr{params: [{0, :integer}]} = query.offset
+      assert %Ecto.Query.QueryExpr{params: [{paginate_by, :integer}]} = query.limit
     end
   end
 end

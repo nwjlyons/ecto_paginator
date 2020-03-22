@@ -24,7 +24,7 @@ defmodule Pagination.MixProject do
     [
       {:ecto, "~> 3.3.4"},
       {:ecto_sql, "~> 3.1"},
-      {:postgrex, ">= 0.0.0"},
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 end
