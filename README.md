@@ -21,7 +21,7 @@ defmodule Foo.Accounts do
     |> Repo.all()
   end
 
-  def count_users do
+  def count_users() do
     Repo.aggregate(list_users_query(), :count)
   end
 
@@ -59,19 +59,15 @@ end
 ### Template
 
 ```html
-<div>
-    <%= if @paginator.previous_page_number do %>
-        <a href="?page=1">First</a>
-        <a href="?page=<%= @paginator.previous_page_number %>">Previous</a>
-    <% end %>
+<%= if @paginator.previous_page_number do %>
+  <a href="?page=1">First</a>
+  <a href="?page=<%= @paginator.previous_page_number %>">Previous</a>
+<% end %>
 
-    <span>
-        Page <%= @paginator.current_page_number %> of <%= @paginator.num_pages %>.
-    </span>
+Page <%= @paginator.current_page_number %> of <%= @paginator.num_pages %>.
 
-    <%= if @paginator.next_page_number do %>
-        <a href="?page=<%= @paginator.next_page_number %>">Next</a>
-        <a href="?page=<%= @paginator.num_pages %>">Last</a>
-    <% end %>
-</div>
+<%= if @paginator.next_page_number do %>
+  <a href="?page=<%= @paginator.next_page_number %>">Next</a>
+  <a href="?page=<%= @paginator.num_pages %>">Last</a>
+<% end %>
 ```

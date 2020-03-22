@@ -7,7 +7,7 @@ defmodule Paginator do
   defguard is_positive_integer(number) when is_integer(number) and number >= 1
 
   @doc """
-  Paginate a Ecto.Query by adding offset and limit expression
+  Paginate an Ecto.Query by adding offset and limit expressions
   """
   def paginate(%Ecto.Query{} = query, page_number, paginate_by)
       when is_positive_integer(page_number) and is_positive_integer(paginate_by) do
@@ -19,25 +19,21 @@ defmodule Paginator do
   end
 
   @doc """
-  Helper function that makes a struct that can be used in templates
+  Helper function that makes a struct that can be used for building "next" and "previous" links in templates
 
   Example:
 
-    <div>
-        <%= if @paginator.previous_page_number do %>
-            <a href="?page=1">First</a>
-            <a href="?page=<%= @paginator.previous_page_number %>">Previous</a>
-        <% end %>
+      <%= if @paginator.previous_page_number do %>
+          <a href="?page=1">First</a>
+          <a href="?page=<%= @paginator.previous_page_number %>">Previous</a>
+      <% end %>
 
-        <span>
-            Page <%= @paginator.current_page_number %> of <%= @paginator.num_pages %>.
-        </span>
+      Page <%= @paginator.current_page_number %> of <%= @paginator.num_pages %>.
 
-        <%= if @paginator.next_page_number do %>
-            <a href="?page=<%= @paginator.next_page_number %>">Next</a>
-            <a href="?page=<%= @paginator.num_pages %>">Last</a>
-        <% end %>
-    </div>
+      <%= if @paginator.next_page_number do %>
+          <a href="?page=<%= @paginator.next_page_number %>">Next</a>
+          <a href="?page=<%= @paginator.num_pages %>">Last</a>
+      <% end %>
   """
   def paginate_helper(page_number, paginate_by, total)
       when is_positive_integer(page_number) and is_positive_integer(paginate_by) and
