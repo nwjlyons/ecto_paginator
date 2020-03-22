@@ -8,7 +8,7 @@ defmodule EctoPaginator.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      licenses: ["MIT"],
+      package: package(),
       source_url: "https://github.com/nwjlyons/ecto_paginator",
       description:
         "Pagination library for Ecto. Includes helper for building 'next' and 'previous' links in a template."
@@ -24,6 +24,12 @@ defmodule EctoPaginator.MixProject do
   defp deps do
     [
       {:ecto, "~> 3.3.4"}
+    ]
+  end
+
+  defp package() do
+    [
+      licenses: ["MIT"],
     ]
   end
 end
