@@ -39,7 +39,7 @@ defmodule FooWeb.UserController do
   alias Foo.Accounts
   alias Foo.Repo
 
-  @paginate_by 5
+  @paginate_by 20
 
   def index(conn, %{"page" => current_page}) do
     {current_page, _} = Integer.parse(current_page)
