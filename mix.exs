@@ -1,4 +1,4 @@
-defmodule Pagination.MixProject do
+defmodule Paginator.MixProject do
   use Mix.Project
 
   def project do
@@ -14,7 +14,6 @@ defmodule Pagination.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {Pagination.Application, []},
       extra_applications: [:logger]
     ]
   end
@@ -22,9 +21,7 @@ defmodule Pagination.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto, "~> 3.3.4"},
-      {:ecto_sql, "~> 3.1"},
-      {:postgrex, ">= 0.0.0"}
+      {:ecto, "~> 3.3.4", only: :test},
     ]
   end
 end
