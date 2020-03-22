@@ -1,4 +1,4 @@
-# Paginator
+# EctoPaginator
 
 ![CI](https://github.com/nwjlyons/paginator/workflows/CI/badge.svg)
 
@@ -17,7 +17,7 @@ defmodule Foo.Accounts do
 
   def list_users_with_pagination(page_number, paginate_by) do
     list_users_query()
-    |> Paginator.paginate(page_number, paginate_by)
+    |> EctoPaginator.paginate(page_number, paginate_by)
     |> Repo.all()
   end
 
@@ -47,7 +47,7 @@ defmodule FooWeb.UserController do
     {current_page, _} = Integer.parse(current_page)
 
     users = Accounts.list_users_with_pagination(current_page, @paginate_by)
-    paginator = Paginator.paginate_helper(current_page, @paginate_by, Accounts.count_users())
+    paginator = EctoPaginator.paginate_helper(current_page, @paginate_by, Accounts.count_users())
 
     render(conn, "index.html", users: users, paginator: paginator)
   end
