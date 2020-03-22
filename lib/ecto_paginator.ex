@@ -4,7 +4,7 @@ defmodule EctoPaginator do
   @enforce_keys [:current_page_number, :next_page_number, :previous_page_number, :num_pages]
   defstruct [:current_page_number, :next_page_number, :previous_page_number, :num_pages]
 
-  defguard is_positive_integer(number) when is_integer(number) and number >= 1
+  defguardp is_positive_integer(number) when is_integer(number) and number >= 1
 
   @doc """
   Paginate an Ecto.Query by adding offset and limit expressions
