@@ -14,5 +14,12 @@ defmodule PaginationTest do
       assert %Ecto.Query.QueryExpr{params: [{0, :integer}]} = query.offset
       assert %Ecto.Query.QueryExpr{params: [{paginate_by, :integer}]} = query.limit
     end
+
+    test "returns Ecto.Query with offset and limit statements for page 5" do
+      paginate_by = 20
+      query = Pagination.paginate(list_fruits(), 5, paginate_by)
+      assert %Ecto.Query.QueryExpr{params: [{80, :integer}]} = query.offset
+      assert %Ecto.Query.QueryExpr{params: [{paginate_by, :integer}]} = query.limit
+    end
   end
 end
