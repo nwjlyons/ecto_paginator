@@ -7,4 +7,13 @@ defmodule Pagination do
     |> offset(^offset_value)
     |> limit(^paginate_by)
   end
+
+  def make_paginate_struct_for_template(page, _paginate_by, total) do
+    %{
+        current_page: page,
+        next_page: page + 1,
+        total_pages: total,
+        previous_page: if previous_page = (page - 1) <= 0 do nil else previous_page end
+    }
+  end
 end
