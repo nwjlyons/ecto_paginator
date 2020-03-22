@@ -44,10 +44,10 @@ defmodule FooWeb.UserController do
   def index(conn, %{"page" => current_page}) do
     {current_page, _} = Integer.parse(current_page)
 
-    page = Accounts.list_users_with_pagination(current_page, @paginate_by)
+    users = Accounts.list_users_with_pagination(current_page, @paginate_by)
     paginator = Paginator.paginate_helper(current_page, @paginate_by, Accounts.count_users())
 
-    render(conn, "index.html", page: page, paginator: paginator)
+    render(conn, "index.html", users: users, paginator: paginator)
   end
 
   def index(conn, _params), do: index(conn, %{"page" => "1"})
