@@ -1,5 +1,7 @@
 # Paginator
 
+Pagination library for Ecto
+
 ## Usage
 
 ### Context
@@ -16,14 +18,18 @@ defmodule Foo.Accounts do
   alias Foo.Accounts.User
 
   def list_users_with_pagination(page_number, paginate_by) do
-    from(User)
-    |> order_by(asc: :inserted_at)
+    list_users_query()
     |> Paginator.paginate(page_number, paginate_by)
     |> Repo.all()
   end
 
   def count_users do
-    Repo.aggregate(User, :count)
+    Repo.aggregate(list_users_query(), :count)
+  end
+
+  defp list_users_query() do
+    from(User)
+    |> order_by(asc: :inserted_at)
   end
 end
 ```
