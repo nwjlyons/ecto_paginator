@@ -8,10 +8,6 @@ Pagination library for Ecto
 
 ```elixir
 defmodule Foo.Accounts do
-  @moduledoc """
-  The Journal context.
-  """
-
   import Ecto.Query, warn: false
   alias Foo.Repo
 
