@@ -2,7 +2,7 @@
 
 ## Usage
 
-```
+```elixir
 def index(conn, %{"page" => current_page}) do
     {current_page, _} = Integer.parse(current_page)
     page_count = Journal.count_page()
@@ -17,8 +17,8 @@ end
 ```
 
 
-```
-<div >
+```html
+<div>
     <span>
         <%= if @paginator.previous_page_number do %>
             <a href="?page=1">&laquo; first</a>
