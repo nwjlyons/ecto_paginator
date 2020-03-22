@@ -3,7 +3,7 @@ defmodule Paginator.MixProject do
 
   def project do
     [
-      app: :pagination,
+      app: :paginator,
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
@@ -21,7 +21,7 @@ defmodule Paginator.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto, "~> 3.3.4", only: :test},
+      {:ecto, "~> 3.3.4"}
     ]
   end
 end

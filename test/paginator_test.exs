@@ -8,7 +8,6 @@ defmodule Paginator.Test.Fruit do
   end
 end
 
-
 defmodule PaginatorTest do
   use ExUnit.Case
   import Ecto.Query, warn: false
@@ -22,11 +21,11 @@ defmodule PaginatorTest do
       assert %Ecto.Query.QueryExpr{params: [{25, :integer}]} = query.limit
 
       assert %Paginator{
-        current_page_number: 1,
-        next_page_number: 2,
-        previous_page_number: nil,
-        num_pages: 4,
-      } = paginator
+               current_page_number: 1,
+               next_page_number: 2,
+               previous_page_number: nil,
+               num_pages: 4
+             } = paginator
     end
   end
 end
