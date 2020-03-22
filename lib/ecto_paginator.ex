@@ -1,4 +1,4 @@
-defmodule Paginator do
+defmodule EctoPaginator do
   import Ecto.Query, warn: false
 
   @enforce_keys [:current_page_number, :next_page_number, :previous_page_number, :num_pages]
@@ -42,7 +42,7 @@ defmodule Paginator do
     previous_page_number = page_number - 1
     num_pages = div(total, paginate_by)
 
-    %Paginator{
+    %EctoPaginator{
       current_page_number: page_number,
       next_page_number: next_page_number(next_page_number, num_pages),
       previous_page_number: previous_page_number(previous_page_number),
