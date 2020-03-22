@@ -1,5 +1,7 @@
 # Paginator
 
+![CI](https://github.com/nwjlyons/paginator/workflows/CI/badge.svg)
+
 Pagination library for Ecto
 
 ## Usage
