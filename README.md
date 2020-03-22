@@ -2,37 +2,72 @@
 
 ## Usage
 
-```elixir
-def index(conn, %{"page" => current_page}) do
-    {current_page, _} = Integer.parse(current_page)
-    page_count = Journal.count_page()
-    {query, paginator} = Paginator.new(Journal.list_page_query(), current_page, 5, page_count)
-    page = Repo.all(query)
-    render(conn, "index.html", page: page, paginator: paginator)
-end
+### Context
 
-def index(conn, _params) do
-    index(conn, %{"page" => "1"})
+```elixir
+defmodule Foo.Accounts do
+  @moduledoc """
+  The Journal context.
+  """
+
+  import Ecto.Query, warn: false
+  alias Foo.Repo
+
+  alias Foo.Accounts.User
+
+  def list_users_with_pagination(page_number, paginate_by) do
+    from(User)
+    |> order_by(asc: :inserted_at)
+    |> Paginator.paginate(page_number, paginate_by)
+    |> Repo.all()
+  end
+
+  def count_users do
+    Repo.aggregate(User, :count)
+  end
 end
 ```
 
+### Controller
+
+```elixir
+defmodule FooWeb.UserController do
+  use FooWeb, :controller
+
+  alias Foo.Accounts
+  alias Foo.Repo
+
+  @paginate_by 5
+
+  def index(conn, %{"page" => current_page}) do
+    {current_page, _} = Integer.parse(current_page)
+
+    page = Accounts.list_users_with_pagination(current_page, @paginate_by)
+    paginator = Paginator.paginate_helper(current_page, @paginate_by, Accounts.count_users())
+
+    render(conn, "index.html", page: page, paginator: paginator)
+  end
+
+  def index(conn, _params), do: index(conn, %{"page" => "1"})
+end
+```
+
+### Template
 
 ```html
 <div>
+    <%= if @paginator.previous_page_number do %>
+        <a href="?page=1">First</a>
+        <a href="?page=<%= @paginator.previous_page_number %>">Previous</a>
+    <% end %>
+
     <span>
-        <%= if @paginator.previous_page_number do %>
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page=<%= @paginator.previous_page_number %>">previous</a>
-        <% end %>
-
-        <span>
-            Page <%= @paginator.current_page_number %> of <%= @paginator.num_pages %>.
-        </span>
-
-        <%= if @paginator.next_page_number do %>
-            <a href="?page=<%= @paginator.next_page_number %>">next</a>
-            <a href="?page=<%= @paginator.num_pages %>">last &raquo;</a>
-        <% end %>
+        Page <%= @paginator.current_page_number %> of <%= @paginator.num_pages %>.
     </span>
+
+    <%= if @paginator.next_page_number do %>
+        <a href="?page=<%= @paginator.next_page_number %>">Next</a>
+        <a href="?page=<%= @paginator.num_pages %>">Last</a>
+    <% end %>
 </div>
 ```
