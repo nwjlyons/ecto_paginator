@@ -30,6 +30,7 @@ defmodule EctoPaginator.MixProject do
   defp package() do
     [
       licenses: ["MIT"],
+      links: %{github: "https://github.com/nwjlyons/ecto_paginator"},
     ]
   end
 end
