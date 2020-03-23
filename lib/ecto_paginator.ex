@@ -69,12 +69,17 @@ defmodule EctoPaginator do
   @enforce_keys [:current_page_number, :next_page_number, :previous_page_number, :num_pages]
   defstruct [:current_page_number, :next_page_number, :previous_page_number, :num_pages]
 
-  defguardp is_positive_integer(number) when is_integer(number) and number >= 1
+  @type t :: %__MODULE__{
+          current_page_number: pos_integer(),
+          next_page_number: pos_integer() | nil,
+          previous_page_number: pos_integer() | nil,
+          num_pages: pos_integer()
+        }
 
   @doc """
-  Paginate an Ecto.Query by adding offset and limit expressions
+  Paginate an `Ecto.Query` by adding `Ecto.Query.offset/3` and `Ecto.Query.limit/3` expressions.
 
-  Example:
+  ## Examples
 
       def list_users_with_pagination(page_number, paginate_by) do
         from(User)
@@ -82,8 +87,9 @@ defmodule EctoPaginator do
         |> Repo.all()
       end
   """
+  @spec paginate(Ecto.Query.t(), pos_integer(), pos_integer()) :: Ecto.Query.t()
   def paginate(%Ecto.Query{} = query, page_number, paginate_by)
-      when is_positive_integer(page_number) and is_positive_integer(paginate_by) do
+      when page_number > 0 and paginate_by > 0 do
     offset_value = (page_number - 1) * paginate_by
 
     query
@@ -92,9 +98,9 @@ defmodule EctoPaginator do
   end
 
   @doc """
-  Helper function that makes a struct that can be used for building "next" and "previous" links in templates
+  Helper function that makes a struct that can be used for building "next" and "previous" links in templates.
 
-  Example:
+  ## Examples
 
       <%= if @paginator.previous_page_number do %>
           <a href="?page=1">First</a>
@@ -108,18 +114,16 @@ defmodule EctoPaginator do
           <a href="?page=<%= @paginator.num_pages %>">Last</a>
       <% end %>
   """
+  @spec paginate_helper(pos_integer(), pos_integer(), pos_integer()) :: __MODULE__.t()
   def paginate_helper(page_number, paginate_by, total)
-      when is_positive_integer(page_number) and is_positive_integer(paginate_by) and
-             is_positive_integer(total) do
-    next_page_number = page_number + 1
-    previous_page_number = page_number - 1
+      when page_number > 0 and paginate_by > 0 and total > 0 do
     num_pages = div(total, paginate_by)
 
-    %EctoPaginator{
+    %__MODULE__{
       current_page_number: page_number,
-      next_page_number: next_page_number(next_page_number, num_pages),
-      previous_page_number: previous_page_number(previous_page_number),
-      num_pages: div(total, paginate_by)
+      next_page_number: next_page_number(page_number + 1, num_pages),
+      previous_page_number: previous_page_number(page_number - 1),
+      num_pages: num_pages
     }
   end
 
