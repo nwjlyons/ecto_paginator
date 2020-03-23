@@ -2,9 +2,9 @@ defmodule EctoPaginator do
   @moduledoc """
   Pagination library for Ecto
 
-  # Usage
+  ## Usage
 
-  ## Context
+  ### Context
 
       defmodule Foo.Accounts do
         import Ecto.Query, warn: false
@@ -28,7 +28,7 @@ defmodule EctoPaginator do
         end
       end
 
-  ## Controller
+  ### Controller
 
       defmodule FooWeb.UserController do
         use FooWeb, :controller
@@ -50,7 +50,7 @@ defmodule EctoPaginator do
         def index(conn, _params), do: index(conn, %{"page" => "1"})
       end
 
-  ## Template
+  ### Template
 
       <%= if @paginator.previous_page_number do %>
         <a href="?page=1">First</a>
@@ -81,11 +81,9 @@ defmodule EctoPaginator do
 
   ## Examples
 
-      def list_users_with_pagination(page_number, paginate_by) do
-        from(User)
-        |> EctoPaginator.paginate(page_number, paginate_by)
-        |> Repo.all()
-      end
+      iex> from("table_name") |> EctoPaginator.paginate(4, 20)
+      #Ecto.Query<from t0 in "table_name", limit: ^20, offset: ^60>
+
   """
   @spec paginate(Ecto.Query.t(), pos_integer(), pos_integer()) :: Ecto.Query.t()
   def paginate(%Ecto.Query{} = query, page_number, paginate_by)
@@ -101,6 +99,16 @@ defmodule EctoPaginator do
   Helper function that makes a struct that can be used for building "next" and "previous" links in templates.
 
   ## Examples
+
+      iex> EctoPaginator.paginate_helper(4, 20, 500)
+      %EctoPaginator{
+        current_page_number: 4,
+        next_page_number: 5,
+        num_pages: 25,
+        previous_page_number: 3
+      }
+
+  ## Use in Templates
 
       <%= if @paginator.previous_page_number do %>
           <a href="?page=1">First</a>

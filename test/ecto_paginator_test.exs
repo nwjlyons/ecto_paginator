@@ -1,6 +1,7 @@
 defmodule EctoPaginatorTest do
   use ExUnit.Case
   import Ecto.Query, warn: false
+  doctest EctoPaginator
 
   describe "paginate" do
     test "returns Ecto.Query with offset and limit expressions populated" do
