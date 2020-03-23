@@ -2,9 +2,9 @@ defmodule EctoPaginator do
   @moduledoc """
   Pagination library for Ecto
 
-  # Usage
+  ## Usage
 
-  ## Context
+  ### Context
 
       defmodule Foo.Accounts do
         import Ecto.Query, warn: false
@@ -28,7 +28,7 @@ defmodule EctoPaginator do
         end
       end
 
-  ## Controller
+  ### Controller
 
       defmodule FooWeb.UserController do
         use FooWeb, :controller
@@ -50,7 +50,7 @@ defmodule EctoPaginator do
         def index(conn, _params), do: index(conn, %{"page" => "1"})
       end
 
-  ## Template
+  ### Template
 
       <%= if @paginator.previous_page_number do %>
         <a href="?page=1">First</a>
@@ -69,21 +69,25 @@ defmodule EctoPaginator do
   @enforce_keys [:current_page_number, :next_page_number, :previous_page_number, :num_pages]
   defstruct [:current_page_number, :next_page_number, :previous_page_number, :num_pages]
 
-  defguardp is_positive_integer(number) when is_integer(number) and number >= 1
+  @type t :: %__MODULE__{
+          current_page_number: pos_integer(),
+          next_page_number: pos_integer() | nil,
+          previous_page_number: pos_integer() | nil,
+          num_pages: pos_integer()
+        }
 
   @doc """
-  Paginate an Ecto.Query by adding offset and limit expressions
+  Paginate an `Ecto.Query` by adding `Ecto.Query.offset/3` and `Ecto.Query.limit/3` expressions.
 
-  Example:
+  ## Examples
 
-      def list_users_with_pagination(page_number, paginate_by) do
-        from(User)
-        |> EctoPaginator.paginate(page_number, paginate_by)
-        |> Repo.all()
-      end
+      iex> from("table_name") |> EctoPaginator.paginate(4, 20)
+      #Ecto.Query<from t0 in "table_name", limit: ^20, offset: ^60>
+
   """
+  @spec paginate(Ecto.Query.t(), pos_integer(), pos_integer()) :: Ecto.Query.t()
   def paginate(%Ecto.Query{} = query, page_number, paginate_by)
-      when is_positive_integer(page_number) and is_positive_integer(paginate_by) do
+      when page_number > 0 and paginate_by > 0 do
     offset_value = (page_number - 1) * paginate_by
 
     query
@@ -92,9 +96,19 @@ defmodule EctoPaginator do
   end
 
   @doc """
-  Helper function that makes a struct that can be used for building "next" and "previous" links in templates
+  Helper function that makes a struct that can be used for building "next" and "previous" links in templates.
 
-  Example:
+  ## Examples
+
+      iex> EctoPaginator.paginate_helper(4, 20, 500)
+      %EctoPaginator{
+        current_page_number: 4,
+        next_page_number: 5,
+        num_pages: 25,
+        previous_page_number: 3
+      }
+
+  ## Use in Templates
 
       <%= if @paginator.previous_page_number do %>
           <a href="?page=1">First</a>
@@ -108,18 +122,16 @@ defmodule EctoPaginator do
           <a href="?page=<%= @paginator.num_pages %>">Last</a>
       <% end %>
   """
+  @spec paginate_helper(pos_integer(), pos_integer(), pos_integer()) :: __MODULE__.t()
   def paginate_helper(page_number, paginate_by, total)
-      when is_positive_integer(page_number) and is_positive_integer(paginate_by) and
-             is_positive_integer(total) do
-    next_page_number = page_number + 1
-    previous_page_number = page_number - 1
+      when page_number > 0 and paginate_by > 0 and total > 0 do
     num_pages = div(total, paginate_by)
 
-    %EctoPaginator{
+    %__MODULE__{
       current_page_number: page_number,
-      next_page_number: next_page_number(next_page_number, num_pages),
-      previous_page_number: previous_page_number(previous_page_number),
-      num_pages: div(total, paginate_by)
+      next_page_number: next_page_number(page_number + 1, num_pages),
+      previous_page_number: previous_page_number(page_number - 1),
+      num_pages: num_pages
     }
   end
 

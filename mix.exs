@@ -27,14 +27,14 @@ defmodule EctoPaginator.MixProject do
   defp deps do
     [
       {:ecto, "~> 3.3.4"},
-      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
   end
 
   defp package() do
     [
       licenses: ["MIT"],
-      links: %{github: "https://github.com/nwjlyons/ecto_paginator"},
+      links: %{github: "https://github.com/nwjlyons/ecto_paginator"}
     ]
   end
 
@@ -42,7 +42,7 @@ defmodule EctoPaginator.MixProject do
     [
       main: "EctoPaginator",
       source_ref: "v#{@version}",
-      source_url: "https://github.com/nwjlyons/ecto_paginator",
+      source_url: "https://github.com/nwjlyons/ecto_paginator"
     ]
   end
 end
