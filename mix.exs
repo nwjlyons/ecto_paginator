@@ -26,7 +26,7 @@ defmodule EctoPaginator.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto, "~> 3.3.4"},
+      {:ecto, "~> 3.4"},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
     ]
   end
